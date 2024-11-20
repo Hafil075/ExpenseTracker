@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Transaction{% endblock %}
+
+{% block content %}
+    <h1>Edit Transaction</h1>
+    <form action="{{ url_for('edit_transaction', transaction_id=transaction.transaction_id) }}" method="POST">
+        <input type="number" name="amount" value="{{ transaction.amount }}" placeholder="Amount" required>
+        <select name="category" required>
+            {% for category in categories %}
+                <option value="{{ category.category_name }}" {% if category.category_id == transaction.category_id %}selected{% endif %}>{{ category.category_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="description" value="{{ transaction.description }}" placeholder="Description">
+        <input type="date" name="date" value="{{ transaction.date }}" required>
+        <button type="submit">Update Transaction</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    <div class="dashboard-wrapper">
+        <div class="expenditure-list">
+            {% if transactions %}
+                <h2>Total Expenditure: {{ total_amount }}</h2>
+                <h3>Transactions</h3>
+                <ul>
+                    {% for transaction in transactions %}
+                    <li>
+                        <div class="transaction-detail">
+                            {{ transaction.amount }} for {{ transaction.category.category_name }}</span> on {{ transaction.date }}
+                            <div class="transaction-description">{{ transaction.description }}</div>
+                        </div>
+                        <div class="button-group">
+                            <a href="{{ url_for('edit_transaction', transaction_id=transaction.transaction_id) }}" class="btn btn-small">Edit</a>
+                            <a href="{{ url_for('delete_transaction', transaction_id=transaction.transaction_id) }}" class="btn btn-small">Delete</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="chart-container">
+                    <canvas id="expenditureChart"></canvas>
+                </div>
+            {% else %}
+                <p>No transactions found. Start by adding your first transaction!</p>
+            {% endif %}
+            <div class="button-group">
+                <a href="{{ url_for('add_transaction') }}" class="btn btn-small">Add Transaction</a>
+                <a href="{{ url_for('confirm_delete_account') }}" class="btn btn-small btn-danger">Delete Account</a>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        let expenditureChart;
+
+        function createChart() {
+            const ctx = document.getElementById('expenditureChart').getContext('2d');
+            expenditureChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [{% for category, total in categories %}'{{ category }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+                    datasets: [{
+                        data: [{% for category, total in categories %}{{ total }}{% if not loop.last %}, {% endif %}{% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!expenditureChart) {
+                createChart();  // Initialize the chart only once
+            }
+        });
+    </script>
+{% endblock %}
