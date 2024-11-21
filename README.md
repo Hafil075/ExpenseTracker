@@ -8,6 +8,7 @@ A simple expense tracker application that helps you manage your daily expenses b
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Screenshots](#screenshots)
 
 
 ## Features
@@ -27,7 +28,7 @@ To get a local copy up and running follow these simple steps.
 1. Clone the repository
    
    ```bash
-   git clone https://github.com/YOUR_GITHUB_USERNAME/Expense-Tracker.git
+   git clone https://github.com/Hafil075/ExpenseTracker.git
    ```
 
 2. Navigate to the project directory
